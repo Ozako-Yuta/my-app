@@ -8,13 +8,19 @@
   <h1>ユーザー一覧</h1>
   <ul>
     <% users.forEach(user => { %>
-      <li><%= user.name %></li>
+      <!-- 名前と一緒に、年齢も表示するようにしたぞ。?? は「空っぽのときは右の文字を出す」という意味じゃ -->
+      <li><%= user.name %>（<%= user.age ?? '秘密' %> 歳）</li>
     <% }) %>
   </ul>
 
   <h2>ユーザー追加</h2>
   <form action="/users" method="post">
+    <!-- 名前の入力欄 -->
     <input type="text" name="name" placeholder="名前を入力しておくれ" required>
+    
+    <!-- 年齢の入力欄を新しく足したぞ！ type="number" にするのがコツじゃ -->
+    <input type="number" name="age" placeholder="年齢（任意）">
+    
     <button type="submit">追加するぞ</button>
   </form>
 </body>

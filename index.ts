@@ -12,10 +12,10 @@ const prisma = new PrismaClient({ adapter, log: ["query"] });
 const app = express();
 const PORT = process.env.PORT || 8888;
 
-// EJS を使う設定じゃ
+// EJS を使う設定
 app.set("view engine", "ejs");
 app.set("views", "./views");
-// フォームからの入力を受け取れるようにするぞ
+// フォームからの入力を受け取れるようにする
 app.use(express.urlencoded({ extended: true }));
 
 // トップページ：ユーザー一覧を表示する
@@ -24,16 +24,23 @@ app.get("/", async (req, res) => {
   res.render("index", { users });
 });
 
-// ユーザー追加：フォームから送られた名前を保存する
+// ユーザー追加
 app.post("/users", async (req, res) => {
-  const name = req.body.name;
+  const { name, age } = req.body;
+  
   if (name) {
-    const newUser = await prisma.user.create({ data: { name } });
-    console.log("新しく追加したぞ:", newUser);
+    await prisma.user.create({ 
+      data: { 
+        name, 
+        age: age ? Number(age) : null 
+      } 
+    });
+    console.log("追加成功じゃ！:", { name, age });
   }
   res.redirect("/");
 });
 
+// ★ここじゃ！この 3 行が抜けておったので、サーバーが起動しなかったのじゃな
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
